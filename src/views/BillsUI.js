@@ -17,14 +17,24 @@ const row = (bill) => {
       </td>
     </tr>
     `)
-  }
-
-const rows = (data) => {
-  return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
 }
 
+const rows = (data) => {
+  // Vérifiez que data est défini et qu'il a une longueur avant de continuer
+  if (data && data.length) {
+    // Triez les données par date en ordre décroissant
+    const sortedData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // Transformez chaque objet trié en une ligne et joignez les lignes en une seule chaîne
+    return sortedData.map(bill => row(bill)).join("");
+  } else {
+    // Si data est vide ou indéfini, retournez une chaîne vide
+    return "";
+  }
+}
+
+
 export default ({ data: bills, loading, error }) => {
-  
+
   const modal = () => (`
     <div class="modal fade" id="modaleFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -47,7 +57,7 @@ export default ({ data: bills, loading, error }) => {
   } else if (error) {
     return ErrorPage(error)
   }
-  
+
   return (`
     <div class='layout'>
       ${VerticalLayout(120)}
